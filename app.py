@@ -78,9 +78,24 @@ def index():
             # 3. Clean
             cleaned = scrub_text(raw_text)
             
-            # 4. Predict
+            # --- NEW DEBUGGING CODE ---
+            print("\n--- DEBUG INFO ---")
+            print(f"Text the model saw: {cleaned[:300]}...") 
+            
             vec = vectoriser.transform([cleaned])
             prediction = model.predict(vec)[0]
+            
+            # Get the top 3 guesses and their percentages
+            probabilities = model.predict_proba(vec)[0]
+            classes = model.classes_
+            
+            # Sort to find the highest percentages
+            top_3_indices = probabilities.argsort()[-3:][::-1]
+            print("\nTop 3 Predictions:")
+            for i in top_3_indices:
+                print(f"{classes[i]}: {probabilities[i]*100:.2f}%")
+            print("------------------\n")
+            # --------------------------
             
             # Clean up: delete file after processing
             os.remove(path)
