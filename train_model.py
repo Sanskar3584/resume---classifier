@@ -29,7 +29,8 @@ vectoriser = TfidfVectorizer(
     stop_words='english', 
     ngram_range=(1, 2), 
     max_features=3000,
-    sublinear_tf=True
+    sublinear_tf=True,
+    min_df = 5
 )
 
 X = vectoriser.fit_transform(df['Cleaned'])
@@ -39,7 +40,7 @@ y = df['Category']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 print("Training Advanced Random Forest...")
-model = RandomForestClassifier(n_estimators=150, random_state=42, class_weight='balanced')
+model = RandomForestClassifier(n_estimators=200, random_state=42, class_weight='balanced')
 model.fit(X_train, y_train)
 
 # Quick Accuracy Check
